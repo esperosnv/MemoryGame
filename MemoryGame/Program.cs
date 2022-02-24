@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Diagnostics;
 
 
 
@@ -14,7 +15,9 @@ namespace MemoryGame
         static int padConst = 15;
         static int scores = 0;
         static int chancesTaken = 10;
-        static string answer;
+        static int maxLevelChances = 0;
+        static Stopwatch sw = new Stopwatch();
+       
 
 
 
@@ -23,6 +26,8 @@ namespace MemoryGame
         {
 
             Console.WriteLine("Hello Users!");
+            string answer = "";
+
 
             do
             {
@@ -31,12 +36,9 @@ namespace MemoryGame
                 Console.WriteLine("2 - Difficalt");
 
                 bool isUserSelectLevel = true;
-
-
-
+               
                 while (isUserSelectLevel)
                 {
-
 
                     string userLevelAnswer = Console.ReadLine();
 
@@ -44,7 +46,7 @@ namespace MemoryGame
                     if (userLevelAnswer == "1")
                     {
                         numberOfCards = 4;
-                        chancesTaken = 10;
+                        maxLevelChances = chancesTaken = 10;
                         isUserSelectLevel = false;
                         Console.WriteLine(numberOfCards);
                     }
@@ -52,7 +54,7 @@ namespace MemoryGame
                     {
                         numberOfCards = 8;
                         isUserSelectLevel = false;
-                        chancesTaken = 15;
+                        maxLevelChances = chancesTaken = 15;
                     }
                     else
                     {
@@ -62,14 +64,19 @@ namespace MemoryGame
 
                 scores = 0;
                 setDate();
-
-                startGame(chancesTaken);
-
+                sw.Restart();
+                startGame(maxLevelChances);
 
                 Console.WriteLine("Do you want to start again? (Yes/No)");
-                answer = Console.ReadLine();
 
-            } while (answer == "Yes");
+                do
+                {
+                    answer = Console.ReadLine().ToUpper();
+                    Console.WriteLine("yes or no");
+                } while (answer != "YES" && answer != "NO");
+   
+
+            } while (answer == "YES");
 
         }
 
@@ -187,10 +194,10 @@ namespace MemoryGame
         {
             while (coordinate.Length != 2 || !Char.IsLetter(coordinate[0]) || !Char.IsDigit(coordinate[1])
                 || Convert.ToInt32(coordinate.Substring(1, 1)) > 4 || Convert.ToInt32(coordinate.Substring(1, 1)) < 1
-                || isCorrectLetter(coordinate))
+                || !isCorrectLetter(coordinate))
 
             {
-                Console.WriteLine("Sorry, you type in incorrect card. Please, repeate again.");
+                Console.WriteLine("Sorry, you type in incorrect card. Please, repeate again. checkCoordinates");
                 coordinate = Console.ReadLine();
 
             }
@@ -248,6 +255,15 @@ namespace MemoryGame
                     if (scores == numberOfCards)
                     {
                         Console.WriteLine("Congratulations! You win this game!");
+
+                        sw.Stop();
+                        int time = (int)sw.Elapsed.TotalSeconds;
+                        int minutes = time / 60;
+                        int seconds = time % 60;
+
+                        Console.WriteLine("You solved the memory game after " + (maxLevelChances - chancesTaken) + ". It took you " + minutes + " minutes " + seconds + " seconds.");
+
+
                         return;
                     }
                 }
@@ -282,7 +298,7 @@ namespace MemoryGame
         static int calculateCardPosition(String coordinate)
         {
             Console.Clear();
-            string letter = coordinate.Substring(0, 1);
+            string letter = coordinate.Substring(0, 1).ToUpper();
             Console.WriteLine(coordinate);
             int number = Convert.ToInt32(coordinate.Substring(1, 1));
             int index = new int();
@@ -321,32 +337,36 @@ namespace MemoryGame
 
         static bool isCorrectLetter(string coordinate)
         {
-           bool result = false;
+           bool result = true;
+          // string firstLetter = coordinate.Substring(0, 1).ToUpper();
 
             switch (numberOfCards)
             {
                 case 4:
 
-                    while ((coordinate.Substring(0, 1) != "A") && (coordinate.Substring(0, 1) != "B"))
+                    
+                    if ((coordinate.Substring(0, 1).ToUpper() != "A")
+                        && (coordinate.Substring(0, 1).ToUpper() != "B"))
                     {
-                        Console.WriteLine("Sorry, you type in incorrect card. Please, repeate again.");
-                        coordinate = Console.ReadLine();
+                        //Console.WriteLine("Sorry, you type in incorrect card. Please, repeate again. case 4");
+                        //coordinate = Console.ReadLine();
                        
                         result = false;
 
                     }
                     break;
                 case 8:
-                    while ((coordinate.Substring(0, 1) != "A") && (coordinate.Substring(0, 1) != "B")
-                        && (coordinate.Substring(0, 1) != "C") && (coordinate.Substring(0, 1) != "D"))
+                    if ((coordinate.Substring(0, 1).ToUpper() != "A")
+                        && (coordinate.Substring(0, 1).ToUpper() != "B")
+                        && (coordinate.Substring(0, 1).ToUpper() != "C")
+                        && (coordinate.Substring(0, 1).ToUpper() != "D"))
                     {
-                        Console.WriteLine("Sorry, you type in incorrect card. Please, repeate again.");
-                        coordinate = Console.ReadLine();
+                        //Console.WriteLine("Sorry, you type in incorrect card. Please, repeate again. case 8");
+                        //coordinate = Console.ReadLine();
                         result = false;
                     }
                     break;
                 default:
-                    result = true;
                     break;
             }
             return result;
