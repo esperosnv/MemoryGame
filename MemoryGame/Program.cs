@@ -8,24 +8,71 @@ namespace MemoryGame
     class Program
     {
 
-        static int numberOfCards = 4;
+        static int numberOfCards = 8;
         static string[] wordsList = new string[numberOfCards * 2];
         static Card[] cards = new Card[numberOfCards * 2];
         static int padConst = 15;
         static int scores = 0;
         static int chancesTaken = 10;
+        static string answer;
+
 
 
 
         static void Main(string[] args)
         {
-            //Console.WriteLine("Hello User!");
 
-            setDate();
-            Console.Clear();
-            startGame(chancesTaken);
+            Console.WriteLine("Hello Users!");
+
+            do
+            {
+                Console.WriteLine("Choose level of game.");
+                Console.WriteLine("1 - Easy");
+                Console.WriteLine("2 - Difficalt");
+
+                bool isUserSelectLevel = true;
+
+
+
+                while (isUserSelectLevel)
+                {
+
+
+                    string userLevelAnswer = Console.ReadLine();
+
+
+                    if (userLevelAnswer == "1")
+                    {
+                        numberOfCards = 4;
+                        chancesTaken = 10;
+                        isUserSelectLevel = false;
+                        Console.WriteLine(numberOfCards);
+                    }
+                    else if (userLevelAnswer == "2")
+                    {
+                        numberOfCards = 8;
+                        isUserSelectLevel = false;
+                        chancesTaken = 15;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Incorrect number. Please, select correct level of game.");
+                    }
+                }
+
+                scores = 0;
+                setDate();
+
+                startGame(chancesTaken);
+
+
+                Console.WriteLine("Do you want to start again? (Yes/No)");
+                answer = Console.ReadLine();
+
+            } while (answer == "Yes");
+
         }
-        
+
 
 
 
