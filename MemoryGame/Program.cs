@@ -14,7 +14,6 @@ namespace MemoryGame
         static Card[] cards = new Card[numberOfCards * 2];
         static int padConst = 15;
         static int scores = 0;
-        static int chancesTaken = 10;
         static int maxLevelChances = 0;
         static Stopwatch sw = new Stopwatch();
        
@@ -46,15 +45,14 @@ namespace MemoryGame
                     if (userLevelAnswer == "1")
                     {
                         numberOfCards = 4;
-                        maxLevelChances = chancesTaken = 10;
+                        maxLevelChances = 10;
                         isUserSelectLevel = false;
-                        Console.WriteLine(numberOfCards);
                     }
                     else if (userLevelAnswer == "2")
                     {
                         numberOfCards = 8;
                         isUserSelectLevel = false;
-                        maxLevelChances = chancesTaken = 15;
+                        maxLevelChances = 15;
                     }
                     else
                     {
@@ -142,12 +140,12 @@ namespace MemoryGame
             }
         }
 
-        static void printCards(Card[] cards)
+        static void printCards(Card[] cards, int chancesTaken)
         {
 
             Console.Clear();
             Console.WriteLine("Your scores = " + scores);
-            Console.WriteLine("Your have " + chancesTaken + " attemps");
+            Console.WriteLine("Your have " + (maxLevelChances - chancesTaken) + " attemps");
             Console.WriteLine("-".PadRight(5) + "1".PadRight(padConst) + "2".PadRight(padConst) + "3".PadRight(padConst) + "4".PadRight(padConst));
 
             for (int i = 0; i < (numberOfCards * 2); i += 1)
@@ -212,10 +210,10 @@ namespace MemoryGame
         {
 
 
-            for (int i = 0; i < attemps; i++)
+            for (int chancesTaken = 0; chancesTaken < attemps; chancesTaken++)
             {
            
-                printCards(cards);
+                printCards(cards, chancesTaken);
 
                 Console.WriteLine("Please select the first card:");
                 string firstCoordinate = Console.ReadLine();
@@ -224,7 +222,7 @@ namespace MemoryGame
                 firstCoordinate = checkCoordinates(firstCoordinate);
                 int firstCardPosition = calculateCardPosition(firstCoordinate);
                 Console.Clear();
-                printCards(cards);
+                printCards(cards, chancesTaken);
 
                 string secondCoordinate;
                 do
@@ -241,7 +239,7 @@ namespace MemoryGame
 
                 int secondCardPosition = calculateCardPosition(secondCoordinate);
                 Console.Clear();
-                printCards(cards);
+                printCards(cards, chancesTaken);
 
 
                 if ((cards[firstCardPosition].word == cards[secondCardPosition].word) && (firstCardPosition != secondCardPosition))
@@ -251,7 +249,6 @@ namespace MemoryGame
                     cards[firstCardPosition].isGuessRight = true;
                     cards[secondCardPosition].isGuessRight = true;
                     scores++;
-                    chancesTaken--;
                     if (scores == numberOfCards)
                     {
                         Console.WriteLine("Congratulations! You win this game!");
@@ -261,7 +258,7 @@ namespace MemoryGame
                         int minutes = time / 60;
                         int seconds = time % 60;
 
-                        Console.WriteLine("You solved the memory game after " + (maxLevelChances - chancesTaken) + ". It took you " + minutes + " minutes " + seconds + " seconds.");
+                        Console.WriteLine("You solved the memory game after " + ( chancesTaken + 1) + ". It took you " + minutes + " minutes " + seconds + " seconds.");
 
 
                         return;
@@ -279,20 +276,13 @@ namespace MemoryGame
                     {
                         cards[secondCardPosition].isOpen = false;
                     }
-
-
-                    chancesTaken--;
-                    if (chancesTaken == 0)
-                    {
-                        Console.WriteLine("You lose game.");
-                        return;
-                    }
                 }
 
                 Console.WriteLine("To continue press Enter");
 
                 while (Console.ReadLine() != "") { };
             }
+            Console.WriteLine("You lost the game.");
         }
 
         static int calculateCardPosition(String coordinate)
@@ -338,7 +328,6 @@ namespace MemoryGame
         static bool isCorrectLetter(string coordinate)
         {
            bool result = true;
-          // string firstLetter = coordinate.Substring(0, 1).ToUpper();
 
             switch (numberOfCards)
             {
@@ -348,11 +337,7 @@ namespace MemoryGame
                     if ((coordinate.Substring(0, 1).ToUpper() != "A")
                         && (coordinate.Substring(0, 1).ToUpper() != "B"))
                     {
-                        //Console.WriteLine("Sorry, you type in incorrect card. Please, repeate again. case 4");
-                        //coordinate = Console.ReadLine();
-                       
                         result = false;
-
                     }
                     break;
                 case 8:
@@ -361,8 +346,6 @@ namespace MemoryGame
                         && (coordinate.Substring(0, 1).ToUpper() != "C")
                         && (coordinate.Substring(0, 1).ToUpper() != "D"))
                     {
-                        //Console.WriteLine("Sorry, you type in incorrect card. Please, repeate again. case 8");
-                        //coordinate = Console.ReadLine();
                         result = false;
                     }
                     break;
