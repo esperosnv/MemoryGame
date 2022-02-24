@@ -75,8 +75,7 @@ namespace MemoryGame
 
             for (int i = 0; i < (numberOfCards * 2); i += 1)
             {
-                //string cardName = new string("card" + (i + 1));
-                //Console.WriteLine(cardName);
+
                 Card card = new Card();
                 card.word = wordsList[i];
                 card.position = i;
@@ -115,10 +114,7 @@ namespace MemoryGame
                         break;
                 }
 
-                Console.Write(cards[i].word.PadRight(padConst));
-
-
-                if (cards[i].isOpen)
+                if (!cards[i].isOpen)
                 {
                     Console.Write(cards[i].word.PadRight(padConst));
                 }
@@ -127,16 +123,12 @@ namespace MemoryGame
                     Console.Write("X".PadRight(padConst));
                 }
 
-
                 if (i % 4 == 3)
                 {
                     Console.WriteLine();
                 }
             }
         }
-
-
-
     }
 }
        
