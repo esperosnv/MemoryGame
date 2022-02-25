@@ -12,6 +12,7 @@ namespace MemoryGame
         static int numberOfCards = 8;
         static string[] wordsList = new string[numberOfCards * 2];
         static Card[] cards = new Card[numberOfCards * 2];
+        static List<UserResult> highScore = new List<UserResult>();
         static int padConst = 15;
         static int scores = 0;
         static int maxLevelChances = 0;
@@ -26,7 +27,6 @@ namespace MemoryGame
 
             Console.WriteLine("Hello Users!");
             string answer = "";
-
 
             do
             {
@@ -64,13 +64,13 @@ namespace MemoryGame
                 setDate();
                 sw.Restart();
                 startGame(maxLevelChances);
+                showBestResults();
 
                 Console.WriteLine("Do you want to start again? (Yes/No)");
 
                 do
                 {
                     answer = Console.ReadLine().ToUpper();
-                    Console.WriteLine("yes or no");
                 } while (answer != "YES" && answer != "NO");
    
 
@@ -130,7 +130,6 @@ namespace MemoryGame
 
             for (int i = 0; i < (numberOfCards * 2); i += 1)
             {
-
                 Card card = new Card();
                 card.word = wordsList[i];
                 card.position = i;
@@ -218,7 +217,6 @@ namespace MemoryGame
         static void startGame(int attemps)
         {
 
-
             for (int chancesTaken = 0; chancesTaken < attemps; chancesTaken++)
             {
            
@@ -226,7 +224,6 @@ namespace MemoryGame
 
                 Console.WriteLine("Please select the first card:");
                 string firstCoordinate = Console.ReadLine();
-
               
                 firstCoordinate = checkCoordinates(firstCoordinate);
                 int firstCardPosition = calculateCardPosition(firstCoordinate);
@@ -272,8 +269,6 @@ namespace MemoryGame
                         Console.WriteLine();
                         Console.WriteLine("To save your result in the win table, please, write your name.");
                         string userName = checkName();
-
-                        //string userName = Console.ReadLine();
 
                         string usersResult = userName + "|" + DateTime.Now.Date.ToShortDateString() + "|" + (chancesTaken + 1) + "|" + time + "\n";
                         string usersResultFilePath = "/Users/nadzieja/Projects/consoleApp/UserResults.txt";
@@ -343,9 +338,6 @@ namespace MemoryGame
                 cards[index].isOpen = !cards[index].isOpen;
             }
 
-           // Console.WriteLine(cards[index].isOpen);
-           // Console.WriteLine(cards[index].isGuessRight);
-
             return index;
 
         }
@@ -356,9 +348,7 @@ namespace MemoryGame
 
             switch (numberOfCards)
             {
-                case 4:
-
-                    
+                case 4:           
                     if ((coordinate.Substring(0, 1).ToUpper() != "A")
                         && (coordinate.Substring(0, 1).ToUpper() != "B"))
                     {
@@ -378,6 +368,40 @@ namespace MemoryGame
                     break;
             }
             return result;
+        }
+
+
+        static void showBestResults()
+        {
+            string[] userResultsFile = File.ReadAllLines("/Users/nadzieja/Projects/consoleApp/UserResults.txt");
+
+            Console.WriteLine("User's best results:");
+            Console.WriteLine();
+            Console.WriteLine("  "+ "Name".PadRight(10) + "Guesses".PadRight(8) + "Seconds".PadRight(8));
+
+            string[] personalData = new string[4];
+            char[] divider = {'|'};
+            highScore.Clear();
+
+            for (int i = 0; i < userResultsFile.Length; i++)
+            {
+                UserResult userResult = new UserResult();
+                personalData = userResultsFile[i].Split(divider);
+                userResult.userName = personalData[0];
+                userResult.day = personalData[1];
+                userResult.wastedChances = Convert.ToInt32(personalData[2]);
+                userResult.seconds = Convert.ToInt32(personalData[3]);
+                highScore.Add(userResult);
+            }
+
+            highScore.Sort();
+
+            for (int i = 0; i < 10 && i < highScore.Count(); i++)
+            {
+                Console.WriteLine(((i + 1) + "." + highScore[i].userName).PadRight(12) + highScore[i].wastedChances + "".PadRight(7) + highScore[i].seconds);
+
+            }
+                Console.WriteLine();
         }
 
     }
