@@ -199,8 +199,20 @@ namespace MemoryGame
             }
 
             return coordinate;
+        }
+
+        static string checkName()
+        { 
+            string userName  = Console.ReadLine();
+
+            while (userName.Length < 2) {
+               Console.WriteLine("Too short name. Please, write your name.");
+               userName = Console.ReadLine();
+            };
+            return userName;
 
         }
+
 
 
         static void startGame(int attemps)
@@ -259,15 +271,19 @@ namespace MemoryGame
                         Console.WriteLine("You solved the memory game after " + ( chancesTaken + 1) + ". It took you " + minutes + " minutes " + seconds + " seconds.");
                         Console.WriteLine();
                         Console.WriteLine("To save your result in the win table, please, write your name.");
+                        string userName = checkName();
 
-                        
+                        //string userName = Console.ReadLine();
+
+                        string usersResult = userName + "|" + DateTime.Now.Date.ToShortDateString() + "|" + (chancesTaken + 1) + "|" + time + "\n";
+                        string usersResultFilePath = "/Users/nadzieja/Projects/consoleApp/UserResults.txt";
 
 
-                        string userName = Console.ReadLine();
-
-                        string usersResult = userName + " | " + DateTime.Now.Date + " | " + (chancesTaken + 1) + " | "  + time;
-
-                        File.WriteAllText("/Users/nadzieja/Projects/consoleApp/UserResults.txt", usersResult);
+                        if (!File.Exists(usersResultFilePath))
+                        {
+                            File.WriteAllText(usersResultFilePath, String.Empty);
+                        }
+                        File.AppendAllText(usersResultFilePath, usersResult);
 
 
                         return;
