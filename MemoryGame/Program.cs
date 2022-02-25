@@ -8,10 +8,8 @@ namespace MemoryGame
 {
     class Program
     {
-
         static void Main(string[] args)
         {
-
             Console.WriteLine("Hello Users!");
             string answer = "";
             Game game = new Game();
@@ -23,7 +21,7 @@ namespace MemoryGame
                 Console.WriteLine("2 - Difficalt");
 
                 bool isUserSelectLevel = true;
-               
+
                 while (isUserSelectLevel)
                 {
 
@@ -45,7 +43,6 @@ namespace MemoryGame
                     }
                 }
 
-
                 game.setData();
                 game.startGame();
                 game.showBestResults();
@@ -55,16 +52,10 @@ namespace MemoryGame
                 {
                     answer = Console.ReadLine().ToUpper();
                 } while (answer != "YES" && answer != "NO");
-   
-
             } while (answer == "YES");
 
             Console.WriteLine("Thanks, bye!");
-
         }
-
-
-
     }
 }
        

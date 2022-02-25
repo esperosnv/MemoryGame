@@ -10,8 +10,7 @@ namespace MemoryGame
 		public int wastedChances = 0;
 		public int seconds = 0;
 
-
-         int IComparable.CompareTo(object obj)
+        int IComparable.CompareTo(object obj)
         {
             UserResult result = (UserResult)obj;
             if (result.wastedChances < this.wastedChances)

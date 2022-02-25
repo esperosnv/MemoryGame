@@ -7,7 +7,6 @@ namespace MemoryGame
 {
 	public class Game
 	{
-
         static int numberOfCards = 8;
         string[] wordsList = new string[numberOfCards * 2];
         Card[] cards = new Card[numberOfCards * 2];
@@ -16,7 +15,6 @@ namespace MemoryGame
         int scores = 0;
         int maxLevelChances = 0;
         Stopwatch sw = new Stopwatch();
-
 
         public void setEasyLevel()
         {
@@ -42,8 +40,6 @@ namespace MemoryGame
                 cards[i] = card;
             }
         }
-
-
 
         public void startGame()
         {
@@ -96,9 +92,6 @@ namespace MemoryGame
                 flipCard(secondCardPosition);
                 printCards(cards, chancesTaken);
 
-                
-
-
                 if (cards[firstCardPosition].word == cards[secondCardPosition].word)
                 {
 
@@ -124,13 +117,11 @@ namespace MemoryGame
                         string usersResult = userName + "|" + DateTime.Now.Date.ToShortDateString() + "|" + (chancesTaken + 1) + "|" + time + "\n";
                         string usersResultFilePath = "/Users/nadzieja/Projects/consoleApp/UserResults.txt";
 
-
                         if (!File.Exists(usersResultFilePath))
                         {
                             File.WriteAllText(usersResultFilePath, String.Empty);
                         }
                         File.AppendAllText(usersResultFilePath, usersResult);
-
 
                         return;
                     }
@@ -149,8 +140,6 @@ namespace MemoryGame
             }
             Console.WriteLine("You lost the game.");
         }
-
-
 
         public void showBestResults()
         {
@@ -184,7 +173,6 @@ namespace MemoryGame
             }
             Console.WriteLine();
         }
-
 
         private void ReadFile()
         {
@@ -227,7 +215,6 @@ namespace MemoryGame
 
         private void printCards(Card[] cards, int chancesTaken)
         {
-
             Console.Clear();
             Console.WriteLine("Your scores = " + scores);
             Console.WriteLine("Your have " + (maxLevelChances - chancesTaken) + " attemps");
@@ -268,7 +255,6 @@ namespace MemoryGame
                 }
             }
         }
-
 
         private string checkCoordinates(string coordinate)
         {
@@ -312,7 +298,6 @@ namespace MemoryGame
             return index;
         }
 
-
         private bool isCorrectLetter(string coordinate)
         {
             bool result = true;
@@ -341,8 +326,6 @@ namespace MemoryGame
             return result;
         }
 
-
-
         private string checkName()
         {
             string userName = Console.ReadLine();
@@ -365,10 +348,6 @@ namespace MemoryGame
             }
 
         }
-
-
-
-
     }
 }
 
