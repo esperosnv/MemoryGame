@@ -186,8 +186,6 @@ namespace MemoryGame
 
 
 
-
-
         static string checkCoordinates(string coordinate)
         {
             while (coordinate.Length != 2 || !Char.IsLetter(coordinate[0]) || !Char.IsDigit(coordinate[1])
@@ -203,7 +201,6 @@ namespace MemoryGame
             return coordinate;
 
         }
-
 
 
         static void startGame(int attemps)
@@ -258,7 +255,19 @@ namespace MemoryGame
                         int minutes = time / 60;
                         int seconds = time % 60;
 
+                        Console.WriteLine();
                         Console.WriteLine("You solved the memory game after " + ( chancesTaken + 1) + ". It took you " + minutes + " minutes " + seconds + " seconds.");
+                        Console.WriteLine();
+                        Console.WriteLine("To save your result in the win table, please, write your name.");
+
+                        
+
+
+                        string userName = Console.ReadLine();
+
+                        string usersResult = userName + " | " + DateTime.Now.Date + " | " + (chancesTaken + 1) + " | "  + time;
+
+                        File.WriteAllText("/Users/nadzieja/Projects/consoleApp/UserResults.txt", usersResult);
 
 
                         return;
