@@ -11,8 +11,8 @@ namespace MemoryGame
         string[] wordsList = new string[numberOfCards * 2];
         Card[] cards = new Card[numberOfCards * 2];
         List<UserResult> userResults = new List<UserResult>();
-        int padConst = 15;
-        int scores = 0;
+        int pad = 15;
+        int score = 0;
         int maxLevelChances = 0;
         Stopwatch sw = new Stopwatch();
         string scoreBoardFile = "ScoreBoard.txt";
@@ -33,7 +33,7 @@ namespace MemoryGame
         {
             ReadFile(wordsFile);
 
-            for (int i = 0; i < (numberOfCards * 2); i += 1)
+            for (int i = 0; i < (numberOfCards * 2); i++)
             {
                 Card card = new Card();
                 card.word = wordsList[i];
@@ -45,7 +45,7 @@ namespace MemoryGame
         public void startGame()
         {
             sw.Restart();
-            scores = 0;
+            score = 0;
 
             for (int chancesTaken = 0; chancesTaken < maxLevelChances; chancesTaken++)
             {
@@ -96,11 +96,11 @@ namespace MemoryGame
                 if (cards[firstCardPosition].word == cards[secondCardPosition].word)
                 {
 
-                    Console.WriteLine("Угадали!");
+                    Console.WriteLine("You guessed!");
                     cards[firstCardPosition].isGuessRight = true;
                     cards[secondCardPosition].isGuessRight = true;
-                    scores++;
-                    if (scores == numberOfCards)
+                    score++;
+                    if (score == numberOfCards)
                     {
                         Console.WriteLine("Congratulations! You won this game!");
 
@@ -115,20 +115,20 @@ namespace MemoryGame
                         Console.WriteLine("To save your result in the win table, please, write your name.");
                         string userName = checkName();
 
-                        string usersResult = userName + "|" + DateTime.Now.Date.ToShortDateString() + "|" + (chancesTaken + 1) + "|" + time + "\n";
+                        string userResult = userName + "|" + DateTime.Now.Date.ToShortDateString() + "|" + (chancesTaken + 1) + "|" + time + "\n";
 
                         if (!File.Exists(scoreBoardFile))
                         {
                             File.WriteAllText(scoreBoardFile, String.Empty);
                         }
-                        File.AppendAllText(scoreBoardFile, usersResult);
+                        File.AppendAllText(scoreBoardFile, userResult);
 
                         return;
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Увы, мимо!");
+                    Console.WriteLine("You didn't guess.");
 
                     flipCard(firstCardPosition);
                     flipCard(secondCardPosition);
@@ -218,11 +218,11 @@ namespace MemoryGame
         private void printCards(Card[] cards, int chancesTaken)
         {
             Console.Clear();
-            Console.WriteLine("Your scores = " + scores);
+            Console.WriteLine("Your scores = " + score);
             Console.WriteLine("Your have " + (maxLevelChances - chancesTaken) + " attemps");
-            Console.WriteLine("-".PadRight(5) + "1".PadRight(padConst) + "2".PadRight(padConst) + "3".PadRight(padConst) + "4".PadRight(padConst));
+            Console.WriteLine("-".PadRight(5) + "1".PadRight(pad) + "2".PadRight(pad) + "3".PadRight(pad) + "4".PadRight(pad));
 
-            for (int i = 0; i < (numberOfCards * 2); i += 1)
+            for (int i = 0; i < (numberOfCards * 2); i++)
             {
                 switch (i)
                 {
@@ -244,11 +244,11 @@ namespace MemoryGame
 
                 if (cards[i].isOpen)
                 {
-                    Console.Write(cards[i].word.PadRight(padConst));
+                    Console.Write(cards[i].word.PadRight(pad));
                 }
                 else
                 {
-                    Console.Write("X".PadRight(padConst));
+                    Console.Write("X".PadRight(pad));
                 }
 
                 if (i % 4 == 3)
@@ -303,21 +303,22 @@ namespace MemoryGame
         private bool isCorrectLetter(string coordinate)
         {
             bool result = true;
+            string letter = coordinate.Substring(0, 1).ToUpper();
 
             switch (numberOfCards)
             {
                 case 4:
-                    if ((coordinate.Substring(0, 1).ToUpper() != "A")
-                        && (coordinate.Substring(0, 1).ToUpper() != "B"))
+                    if ((letter != "A")
+                        && (letter != "B"))
                     {
                         result = false;
                     }
                     break;
                 case 8:
-                    if ((coordinate.Substring(0, 1).ToUpper() != "A")
-                        && (coordinate.Substring(0, 1).ToUpper() != "B")
-                        && (coordinate.Substring(0, 1).ToUpper() != "C")
-                        && (coordinate.Substring(0, 1).ToUpper() != "D"))
+                    if ((letter != "A")
+                        && (letter != "B")
+                        && (letter != "C")
+                        && (letter != "D"))
                     {
                         result = false;
                     }
