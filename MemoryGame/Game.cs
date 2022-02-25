@@ -16,18 +16,25 @@ namespace MemoryGame
         int maxLevelChances = 0;
         Stopwatch sw = new Stopwatch();
         string scoreBoardFile = "ScoreBoard.txt";
+        string level;
+
+
 
         public void setEasyLevel()
         {
             numberOfCards = 4;
             maxLevelChances = 10;
+            level = "easy";
         }
 
         public void setHardLevel()
         {
             numberOfCards = 8;
             maxLevelChances = 15;
+            level = "hard";
         }
+
+
 
         public void setData(string wordsFile)
         {
@@ -41,6 +48,8 @@ namespace MemoryGame
                 cards[i] = card;
             }
         }
+
+
 
         public void startGame()
         {
@@ -141,6 +150,8 @@ namespace MemoryGame
             Console.WriteLine("You lost the game.");
         }
 
+
+
         public void showBestResults()
         {
             string[] scoreBoard = File.ReadAllLines(scoreBoardFile);
@@ -174,6 +185,10 @@ namespace MemoryGame
             Console.WriteLine();
         }
 
+
+
+
+
         private void ReadFile(string wordsFile)
         {
 
@@ -201,6 +216,8 @@ namespace MemoryGame
             wordsList = Shuffle(wordsList);
         }
 
+
+
         private string[] Shuffle(string[] wordArray)
         {
             Random random = new Random();
@@ -215,11 +232,16 @@ namespace MemoryGame
             return wordArray;
         }
 
+
+
         private void printCards(Card[] cards, int chancesTaken)
         {
             Console.Clear();
-            Console.WriteLine("Your scores = " + score);
-            Console.WriteLine("Your have " + (maxLevelChances - chancesTaken) + " attemps");
+
+            Console.WriteLine("Level: " + level);
+               
+            Console.WriteLine("Your score = " + score);
+            Console.WriteLine("You have " + (maxLevelChances - chancesTaken) + " attempts");
             Console.WriteLine("-".PadRight(5) + "1".PadRight(pad) + "2".PadRight(pad) + "3".PadRight(pad) + "4".PadRight(pad));
 
             for (int i = 0; i < (numberOfCards * 2); i++)

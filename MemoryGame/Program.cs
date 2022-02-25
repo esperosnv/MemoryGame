@@ -28,7 +28,7 @@ namespace MemoryGame
             {
                 Console.WriteLine("Choose level of game.");
                 Console.WriteLine("1 - Easy");
-                Console.WriteLine("2 - Difficalt");
+                Console.WriteLine("2 - Hard");
 
                 bool isUserSelectLevel = true;
 
