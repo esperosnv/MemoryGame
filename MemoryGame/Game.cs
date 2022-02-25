@@ -15,6 +15,7 @@ namespace MemoryGame
         int scores = 0;
         int maxLevelChances = 0;
         Stopwatch sw = new Stopwatch();
+        string scoreBoardFile = "ScoreBoard.txt";
 
         public void setEasyLevel()
         {
@@ -28,9 +29,9 @@ namespace MemoryGame
             maxLevelChances = 15;
         }
 
-        public void setData()
+        public void setData(string wordsFile)
         {
-            ReadFile();
+            ReadFile(wordsFile);
 
             for (int i = 0; i < (numberOfCards * 2); i += 1)
             {
@@ -45,7 +46,7 @@ namespace MemoryGame
         {
             sw.Restart();
             scores = 0;
-            Console.WriteLine("maxLevelChances " + maxLevelChances);
+
             for (int chancesTaken = 0; chancesTaken < maxLevelChances; chancesTaken++)
             {
 
@@ -109,19 +110,18 @@ namespace MemoryGame
                         int seconds = time % 60;
 
                         Console.WriteLine();
-                        Console.WriteLine("You solved the memory game after " + (chancesTaken + 1) + ". It took you " + minutes + " minutes " + seconds + " seconds.");
+                        Console.WriteLine("You solved the memory game after " + (chancesTaken + 1) + " attemps. It took you " + minutes + " minutes " + seconds + " seconds.");
                         Console.WriteLine();
                         Console.WriteLine("To save your result in the win table, please, write your name.");
                         string userName = checkName();
 
                         string usersResult = userName + "|" + DateTime.Now.Date.ToShortDateString() + "|" + (chancesTaken + 1) + "|" + time + "\n";
-                        string usersResultFilePath = "/Users/nadzieja/Projects/consoleApp/UserResults.txt";
 
-                        if (!File.Exists(usersResultFilePath))
+                        if (!File.Exists(scoreBoardFile))
                         {
-                            File.WriteAllText(usersResultFilePath, String.Empty);
+                            File.WriteAllText(scoreBoardFile, String.Empty);
                         }
-                        File.AppendAllText(usersResultFilePath, usersResult);
+                        File.AppendAllText(scoreBoardFile, usersResult);
 
                         return;
                     }
@@ -143,20 +143,20 @@ namespace MemoryGame
 
         public void showBestResults()
         {
-            string[] userResultsFile = File.ReadAllLines("/Users/nadzieja/Projects/consoleApp/UserResults.txt");
+            string[] scoreBoard = File.ReadAllLines(scoreBoardFile);
 
             Console.WriteLine("User's best results:");
             Console.WriteLine();
-            Console.WriteLine("  " + "Name".PadRight(10) + "Guesses".PadRight(8) + "Seconds".PadRight(8));
+            Console.WriteLine(("   " + "Name").PadRight(12) + "Guesses".PadRight(8) + "Seconds".PadRight(8));
 
             string[] personalData = new string[4];
             char[] divider = { '|' };
             userResults.Clear();
 
-            for (int i = 0; i < userResultsFile.Length; i++)
+            for (int i = 0; i < scoreBoard.Length; i++)
             {
                 UserResult userResult = new UserResult();
-                personalData = userResultsFile[i].Split(divider);
+                personalData = scoreBoard[i].Split(divider);
                 userResult.userName = personalData[0];
                 userResult.day = personalData[1];
                 userResult.wastedChances = Convert.ToInt32(personalData[2]);
@@ -168,15 +168,17 @@ namespace MemoryGame
 
             for (int i = 0; i < 10 && i < userResults.Count(); i++)
             {
-                Console.WriteLine(((i + 1) + "." + userResults[i].userName).PadRight(12) + userResults[i].wastedChances + "".PadRight(7) + userResults[i].seconds);
+                Console.WriteLine(((i + 1) + ". " + userResults[i].userName).PadRight(12) + userResults[i].wastedChances.ToString().PadRight(8) + userResults[i].seconds);
 
             }
             Console.WriteLine();
         }
 
-        private void ReadFile()
+        private void ReadFile(string wordsFile)
         {
-            var words = File.ReadAllLines("/Users/nadzieja/Projects/consoleApp/Words.txt");
+
+            var words = File.ReadAllLines(wordsFile);
+
 
             var rand = new Random();
             List<int> listNumbers = new List<int>();
@@ -263,7 +265,7 @@ namespace MemoryGame
                 || !isCorrectLetter(coordinate))
 
             {
-                Console.WriteLine("Sorry, you type in incorrect card. Please, repeate again. checkCoordinates");
+                Console.WriteLine("Sorry, you typed in incorrect card. Please, repeate again.");
                 coordinate = Console.ReadLine();
 
             }
@@ -341,7 +343,6 @@ namespace MemoryGame
 
         private void flipCard(int position)
         {
-
             if (cards[position].isGuessRight == false)
             {
                 cards[position].isOpen = !cards[position].isOpen;

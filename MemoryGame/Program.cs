@@ -8,8 +8,18 @@ namespace MemoryGame
 {
     class Program
     {
+        static string wordsFile = "Words.txt";
+
         static void Main(string[] args)
         {
+
+            if (!File.Exists(wordsFile))
+            {
+                Console.WriteLine("Please put the Words.txt file to the same directory with MemoryGame executable file.");
+                return;
+            }
+
+
             Console.WriteLine("Hello Users!");
             string answer = "";
             Game game = new Game();
@@ -43,7 +53,7 @@ namespace MemoryGame
                     }
                 }
 
-                game.setData();
+                game.setData(wordsFile);
                 game.startGame();
                 game.showBestResults();
 
