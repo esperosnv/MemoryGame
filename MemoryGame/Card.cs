@@ -2,11 +2,11 @@
 
 namespace MemoryGame
 {
-	public class Card
+	public struct Card
 	{
 
 		public string word = "";
-		public int position;
+		public int position = 0;
 		public bool isOpen = false;
 		public bool isGuessRight = false;
 
