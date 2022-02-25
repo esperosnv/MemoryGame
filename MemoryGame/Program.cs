@@ -45,6 +45,7 @@ namespace MemoryGame
                     }
                 }
 
+
                 game.setData();
                 game.startGame();
                 game.showBestResults();
@@ -57,6 +58,8 @@ namespace MemoryGame
    
 
             } while (answer == "YES");
+
+            Console.WriteLine("Thanks, bye!");
 
         }
 

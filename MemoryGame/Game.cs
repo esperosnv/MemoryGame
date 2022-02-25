@@ -18,14 +18,6 @@ namespace MemoryGame
         static Stopwatch sw = new Stopwatch();
 
 
-
-
-
-
-  //      public Game()
-		//{
-		//}
-
         public void setEasyLevel()
         {
             numberOfCards = 4;
@@ -47,7 +39,6 @@ namespace MemoryGame
                 Card card = new Card();
                 card.word = wordsList[i];
                 card.position = i;
-                // Console.WriteLine(card.word + " " + card.position + " " + card.isOpen);
                 cards[i] = card;
             }
         }
@@ -63,31 +54,49 @@ namespace MemoryGame
             {
 
                 printCards(cards, chancesTaken);
+                string firstCoordinate;
+                int firstCardPosition;
 
-                Console.WriteLine("Please select the first card:");
-                string firstCoordinate = Console.ReadLine();
+                do
+                {
+                    Console.WriteLine("Please select the first card:");
+                    firstCoordinate = Console.ReadLine();
 
-                firstCoordinate = checkCoordinates(firstCoordinate);
-                int firstCardPosition = calculateCardPosition(firstCoordinate);
-                Console.Clear();
+                    firstCoordinate = checkCoordinates(firstCoordinate);
+                    firstCardPosition = calculateCardPosition(firstCoordinate);
+                    if (cards[firstCardPosition].isGuessRight)
+                    {
+                        Console.WriteLine("This card is already guessed. Try another card.");
+                    }
+                } while (cards[firstCardPosition].isGuessRight);
+
+                flipCard(firstCardPosition);
                 printCards(cards, chancesTaken);
 
                 string secondCoordinate;
+                int secondCardPosition;
                 do
                 {
                     Console.WriteLine("Please select the second card:");
                     secondCoordinate = Console.ReadLine();
+
                     secondCoordinate = checkCoordinates(secondCoordinate);
                     if (secondCoordinate == firstCoordinate)
                     {
                         Console.WriteLine("You typed in the same position");
                     }
-                } while (secondCoordinate == firstCoordinate);
 
+                    secondCardPosition = calculateCardPosition(secondCoordinate);
+                    if (cards[secondCardPosition].isGuessRight)
+                    {
+                        Console.WriteLine("This card is already guessed. Try another card.");
+                    }
+                } while ((secondCoordinate == firstCoordinate) || cards[secondCardPosition].isGuessRight);
 
-                int secondCardPosition = calculateCardPosition(secondCoordinate);
-                Console.Clear();
+                flipCard(secondCardPosition);
                 printCards(cards, chancesTaken);
+
+                
 
 
                 if ((cards[firstCardPosition].word == cards[secondCardPosition].word) && (firstCardPosition != secondCardPosition))
@@ -130,23 +139,16 @@ namespace MemoryGame
                 {
                     Console.WriteLine("Увы, мимо!");
 
-                    if (cards[firstCardPosition].isGuessRight == false)
-                    {
-                        cards[firstCardPosition].isOpen = false;
-                    }
-                    if (cards[secondCardPosition].isGuessRight == false)
-                    {
-                        cards[secondCardPosition].isOpen = false;
-                    }
+                    flipCard(firstCardPosition);
+                    flipCard(secondCardPosition);
+
                 }
 
                 Console.WriteLine("To continue press Enter");
-
                 while (Console.ReadLine() != "") { };
             }
             Console.WriteLine("You lost the game.");
         }
-
 
 
 
@@ -182,12 +184,6 @@ namespace MemoryGame
             }
             Console.WriteLine();
         }
-
-
-
-
-
-
 
 
         private void ReadFile()
@@ -286,14 +282,12 @@ namespace MemoryGame
 
             }
 
-            return coordinate;
+            return coordinate.ToUpper();
         }
 
         private int calculateCardPosition(String coordinate)
         {
-            Console.Clear();
             string letter = coordinate.Substring(0, 1).ToUpper();
-            Console.WriteLine(coordinate);
             int number = Convert.ToInt32(coordinate.Substring(1, 1));
             int index = new int();
 
@@ -313,13 +307,6 @@ namespace MemoryGame
                     break;
                 default:
                     break;
-            }
-            Console.WriteLine(cards[index].word);
-
-
-            if (cards[index].isGuessRight == false)
-            {
-                cards[index].isOpen = !cards[index].isOpen;
             }
 
             return index;
@@ -356,7 +343,6 @@ namespace MemoryGame
 
 
 
-
         private string checkName()
         {
             string userName = Console.ReadLine();
@@ -367,6 +353,16 @@ namespace MemoryGame
                 userName = Console.ReadLine();
             };
             return userName;
+
+        }
+
+        private void flipCard(int position)
+        {
+
+            if (cards[position].isGuessRight == false)
+            {
+                cards[position].isOpen = !cards[position].isOpen;
+            }
 
         }
 
