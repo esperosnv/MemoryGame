@@ -9,13 +9,13 @@ namespace MemoryGame
 	{
 
         static int numberOfCards = 8;
-        static string[] wordsList = new string[numberOfCards * 2];
-        static Card[] cards = new Card[numberOfCards * 2];
-        static List<UserResult> highScore = new List<UserResult>();
-        static int padConst = 15;
-        static int scores = 0;
-        static int maxLevelChances = 0;
-        static Stopwatch sw = new Stopwatch();
+        string[] wordsList = new string[numberOfCards * 2];
+        Card[] cards = new Card[numberOfCards * 2];
+        List<UserResult> userResults = new List<UserResult>();
+        int padConst = 15;
+        int scores = 0;
+        int maxLevelChances = 0;
+        Stopwatch sw = new Stopwatch();
 
 
         public void setEasyLevel()
@@ -99,7 +99,7 @@ namespace MemoryGame
                 
 
 
-                if ((cards[firstCardPosition].word == cards[secondCardPosition].word) && (firstCardPosition != secondCardPosition))
+                if (cards[firstCardPosition].word == cards[secondCardPosition].word)
                 {
 
                     Console.WriteLine("Угадали!");
@@ -108,7 +108,7 @@ namespace MemoryGame
                     scores++;
                     if (scores == numberOfCards)
                     {
-                        Console.WriteLine("Congratulations! You win this game!");
+                        Console.WriteLine("Congratulations! You won this game!");
 
                         sw.Stop();
                         int time = (int)sw.Elapsed.TotalSeconds;
@@ -162,7 +162,7 @@ namespace MemoryGame
 
             string[] personalData = new string[4];
             char[] divider = { '|' };
-            highScore.Clear();
+            userResults.Clear();
 
             for (int i = 0; i < userResultsFile.Length; i++)
             {
@@ -172,14 +172,14 @@ namespace MemoryGame
                 userResult.day = personalData[1];
                 userResult.wastedChances = Convert.ToInt32(personalData[2]);
                 userResult.seconds = Convert.ToInt32(personalData[3]);
-                highScore.Add(userResult);
+                userResults.Add(userResult);
             }
 
-            highScore.Sort();
+            userResults.Sort();
 
-            for (int i = 0; i < 10 && i < highScore.Count(); i++)
+            for (int i = 0; i < 10 && i < userResults.Count(); i++)
             {
-                Console.WriteLine(((i + 1) + "." + highScore[i].userName).PadRight(12) + highScore[i].wastedChances + "".PadRight(7) + highScore[i].seconds);
+                Console.WriteLine(((i + 1) + "." + userResults[i].userName).PadRight(12) + userResults[i].wastedChances + "".PadRight(7) + userResults[i].seconds);
 
             }
             Console.WriteLine();
